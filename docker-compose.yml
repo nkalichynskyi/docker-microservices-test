@@ -1,0 +1,33 @@
+version: '2'
+services:
+  bookservice:
+    container_name: bookService
+    build:
+      context: .
+      dockerfile: Dockerfile.book
+    ports:
+      - 3002:3002
+    networks:
+      - test-rolique
+  userservice:
+    container_name: userService
+    build:
+      context: .
+      dockerfile: Dockerfile.user
+    ports:
+      - 3001:3001
+    networks:
+      - test-rolique
+  proxy:
+    container_name: proxy
+    build:
+      context: .
+      dockerfile: Dockerfile.proxy
+    ports:
+      - 3000:3000
+    networks:
+      - test-rolique
+
+networks:
+  test-rolique:
+    driver: bridge

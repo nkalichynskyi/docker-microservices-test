@@ -1,0 +1,13 @@
+FROM node:9.2.0
+
+RUN mkdir /src
+WORKDIR /src
+COPY package.json /src/package.json
+COPY proxy /src/proxy
+COPY config /src/config
+
+RUN npm i
+
+EXPOSE 3001
+
+CMD ["node", "proxy/app"]

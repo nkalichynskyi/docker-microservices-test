@@ -1,0 +1,12 @@
+{
+  "proxy":{
+    "port":3000
+  },
+  "user":{
+    "port":3001
+  },
+  "book":{
+    "port":3002
+  },
+  "db":"mongodb://rolique:rolique@ds113136.mlab.com:13136/test_task"
+}
