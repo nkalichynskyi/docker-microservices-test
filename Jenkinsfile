@@ -1,27 +1,32 @@
-node('node') {
+pipeline {
+    node {
+        // Clean workspace before doing anything
+        deleteDir()
 
-    currentBuild.result = "SUCCESS"
-
-		stage('Checkout'){
-
-			 checkout scm
-		}
-
-		stage('Test'){
-
-			env.NODE_ENV = "test"
-
-			print "Environment will be : ${env.NODE_ENV}"
-
-			sh 'node -v'
-			sh 'npm prune'
-			sh 'npm install'
-
-		}
-
-		stage('Build Docker'){
-
-				 sh 'docker-compose up -d'
-		}
-
+        try {
+            stage ('Clone') {
+                checkout scm
+            }
+            stage ('Build') {
+                sh "echo 'shell scripts to build project...'"
+            }
+            stage ('Tests') {
+                parallel 'static': {
+                    sh "echo 'shell scripts to run static tests...'"
+                },
+                'unit': {
+                    sh "echo 'shell scripts to run unit tests...'"
+                },
+                'integration': {
+                    sh "echo 'shell scripts to run integration tests...'"
+                }
+            }
+            stage ('Deploy') {
+                sh "echo 'shell scripts to deploy to server...'"
+            }
+        } catch (err) {
+            currentBuild.result = 'FAILED'
+            throw err
+        }
+    }
 }
